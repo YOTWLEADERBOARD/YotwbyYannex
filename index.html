@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOTW – Classement général by Yannex</title>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --bg2: #18181f;
+      --bg3: #21212b;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #e8e6f0;
+      --muted: #8a87a0;
+      --faint: #4a4760;
+      --accent: #7c6af7;
+      --accent2: #a78bfa;
+      --gold: #f5c842;
+      --gold-bg: rgba(245,200,66,0.12);
+      --silver-bg: rgba(180,180,200,0.10);
+      --bronze-bg: rgba(180,100,50,0.10);
+      --green: #4ade80;
+      --green-bg: rgba(74,222,128,0.10);
+      --font: 'Inter', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px; position: sticky; top: 0; background: var(--bg); z-index: 10;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 12px; color: var(--muted); }
+    #last-update { font-size: 11px; color: var(--faint); }
+
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--bg); }
+    .tab { background: none; border: none; border-bottom: 2px solid transparent; padding: 12px 16px;
+      font-size: 13px; font-weight: 500; cursor: pointer; color: var(--muted); font-family: var(--font);
+      transition: all .15s; margin-bottom: -1px; }
+    .tab.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+    .tab:hover:not(.active) { color: var(--text); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .stat-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
+
+    .lb-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { background: var(--bg3); font-size: 11px; font-weight: 600; color: var(--muted);
+      padding: 10px 14px; text-align: left; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.025); }
+    td { padding: 10px 14px; font-size: 13px; white-space: nowrap; }
+    .tc { text-align: center; }
+
+    .rank-badge { display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 12px; }
+    .rank-1 { background: var(--gold-bg); color: var(--gold); }
+    .rank-2 { background: var(--silver-bg); color: #c0bfd4; }
+    .rank-3 { background: var(--bronze-bg); color: #cd7f50; }
+    .rank-n { background: var(--bg3); color: var(--faint); }
+
+    .player-name { font-weight: 600; color: var(--text); }
+    .pts-main { font-weight: 700; font-size: 14px; color: var(--accent2); }
+    .pts-unit { font-size: 11px; color: var(--faint); margin-left: 2px; }
+    .avg-pos { color: var(--muted); font-size: 12px; }
+    .tie-mark { font-size: 10px; color: var(--accent); margin-left: 3px; }
+
+    .week-pts { display: inline-block; padding: 2px 8px; border-radius: 5px;
+      font-size: 12px; font-weight: 600; background: var(--bg3); color: var(--muted); }
+    .week-pts.gold { background: var(--gold-bg); color: var(--gold); }
+
+    .row-1 td { background: rgba(245,200,66,0.04); }
+    .row-2 td { background: rgba(180,180,200,0.03); }
+    .row-3 td { background: rgba(180,100,50,0.03); }
+
+    .week-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px 20px; margin-bottom: 14px; }
+    .week-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .week-name { font-size: 15px; font-weight: 700; }
+    .week-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .week-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      background: var(--green-bg); color: var(--green); white-space: nowrap; }
+
+    #loading, #error { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
+    #error { color: #f87171; }
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border2);
+      border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { text-align: center; padding: 32px 24px; font-size: 11px; color: var(--faint); border-top: 1px solid var(--border); margin-top: 40px; }
+
+    @media(max-width:600px){
+      main { padding: 16px; }
+      .tabs { padding: 0 16px; }
+      header { padding: 0 16px; }
+      .logo-sub { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏁</div>
+    <div>
+      <div class="logo-text">YOTW Leaderboard</div>
+      <div class="logo-sub">by Yannex · Trackmania</div>
+    </div>
+  </div>
+  <div id="last-update"></div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('classement', this)">Classement général</button>
+  <button class="tab" onclick="showTab('semaines', this)">Par semaine</button>
+</div>
+
+<main>
+  <div id="loading"><span class="spinner"></span>Chargement du classement…</div>
+  <div id="error" style="display:none"></div>
+
+  <div id="panel-classement" class="panel">
+    <div class="stats-row" id="stats-row"></div>
+    <div class="lb-wrap"><table id="lb-table"><thead id="lb-head"></thead><tbody id="lb-body"></tbody></table></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--faint)">* En cas d'égalité de points, départage par position relative moyenne (pos / total participants)</div>
+  </div>
+
+  <div id="panel-semaines" class="panel">
+    <div id="semaines-content"></div>
+  </div>
+</main>
+
+<footer>YOTW · Map of the Week by Yannex · Trackmania · Mis à jour manuellement après chaque édition</footer>
+
+<script>
+async function loadData() {
+  try {
+    const r = await fetch('./data.json?t=' + Date.now());
+    if (!r.ok) throw new Error('Fichier data.json introuvable (statut ' + r.status + ')');
+    return await r.json();
+  } catch(e) {
+    throw e;
+  }
+}
+
+function getLB(evts, res) {
+  const p = {};
+  evts.forEach(ev => {
+    const total = ev.total || 1;
+    (res[ev.id] || []).forEach(r => {
+      if (!p[r.name]) p[r.name] = { name: r.name, pts: 0, played: 0, posSum: 0, relSum: 0, hist: {} };
+      p[r.name].pts += r.points;
+      p[r.name].played++;
+      p[r.name].posSum += r.pos;
+      p[r.name].relSum += r.pos / total;
+      p[r.name].hist[ev.id] = { pos: r.pos, points: r.points };
+    });
+  });
+  return Object.values(p).map(p => ({
+    ...p,
+    avgPos: p.played > 0 ? p.posSum / p.played : 999,
+    avgRel: p.played > 0 ? p.relSum / p.played : 1
+  })).sort((a, b) => b.pts !== a.pts ? b.pts - a.pts : a.avgRel - b.avgRel);
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderClassement(evts, res, updatedAt) {
+  const lb = getLB(evts, res);
+  const totalPlayers = lb.length;
+  const totalWeeks = evts.length;
+  const totalParts = evts.reduce((a, ev) => a + (res[ev.id] || []).length, 0);
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Joueurs</div><div class="stat-value">${totalPlayers}</div></div>
+    <div class="stat-card"><div class="stat-label">Semaines</div><div class="stat-value">${totalWeeks}</div></div>
+    <div class="stat-card"><div class="stat-label">Participations</div><div class="stat-value">${totalParts}</div></div>
+    ${lb[0] ? `<div class="stat-card"><div class="stat-label">Leader</div><div class="stat-value" style="font-size:15px;padding-top:3px">${esc(lb[0].name)}</div></div>` : ''}
+  `;
+
+  const eHdrs = evts.map(ev => `<th class="tc" style="min-width:82px;line-height:1.5">${esc(ev.name)}<br><span style="font-weight:400;color:var(--faint);font-size:10px">${ev.date}</span></th>`).join('');
+  document.getElementById('lb-head').innerHTML = `<tr><th>#</th><th>Joueur</th><th>Points</th><th class="tc">Part.</th><th class="tc">Moy.*</th>${eHdrs}</tr>`;
+
+  document.getElementById('lb-body').innerHTML = lb.map((p, i) => {
+    const r = i + 1;
+    const badgeCls = r === 1 ? 'rank-1' : r === 2 ? 'rank-2' : r === 3 ? 'rank-3' : 'rank-n';
+    const rowCls = r === 1 ? 'row-1' : r === 2 ? 'row-2' : r === 3 ? 'row-3' : '';
+    const tied = (i > 0 && lb[i-1].pts === p.pts) || (i < lb.length-1 && lb[i+1].pts === p.pts);
+    const cells = evts.map(ev => {
+      const h = p.hist[ev.id];
+      if (!h) return '<td class="tc" style="color:var(--faint)">—</td>';
+      return `<td class="tc"><span class="week-pts${h.pos===1?' gold':''}">${h.points}</span></td>`;
+    }).join('');
+    return `<tr class="${rowCls}">
+      <td><span class="rank-badge ${badgeCls}">${r}</span></td>
+      <td class="player-name">${esc(p.name)}</td>
+      <td><span class="pts-main">${p.pts}</span><span class="pts-unit">pts</span></td>
+      <td class="tc avg-pos">${p.played}</td>
+      <td class="tc avg-pos">${p.avgPos.toFixed(1)}${tied?'<span class="tie-mark">*</span>':''}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  if (updatedAt) {
+    document.getElementById('last-update').textContent = 'Mis à jour le ' + updatedAt;
+  }
+}
+
+function renderSemaines(evts, res) {
+  const el = document.getElementById('semaines-content');
+  if (!evts.length) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:3rem">Aucune semaine enregistrée.</div>'; return; }
+  el.innerHTML = [...evts].reverse().map(ev => {
+    const rs = (res[ev.id] || []).sort((a, b) => a.pos - b.pos);
+    const total = ev.total || '?';
+    const rows = rs.map(r => `<tr>
+      <td style="color:var(--muted);width:50px">${r.pos}</td>
+      <td class="player-name">${esc(r.name)}</td>
+      <td><span class="week-pts${r.pos===1?' gold':''}">${r.points} pts</span></td>
+    </tr>`).join('');
+    return `<div class="week-card">
+      <div class="week-card-header">
+        <div>
+          <div class="week-name">${esc(ev.name)}</div>
+          <div class="week-meta">${ev.date} · ${total} participants · ${rs.length} dans le top 30</div>
+        </div>
+        <div class="week-badge">${ev.date}</div>
+      </div>
+      ${rs.length ? `<div style="overflow-x:auto"><table><thead><tr><th>Pos.</th><th>Joueur</th><th>Points</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p style="font-size:13px;color:var(--muted)">Aucun résultat.</p>'}
+    </div>`;
+  }).join('');
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+(async () => {
+  try {
+    const data = await loadData();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('panel-classement').classList.add('active');
+    renderClassement(data.evts || [], data.res || {}, data.updatedAt || '');
+    renderSemaines(data.evts || [], data.res || {});
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').innerHTML = '⚠️ ' + e.message + '<br><small style="color:var(--faint);margin-top:8px;display:block">Vérifie que le fichier data.json est bien présent dans le dépôt GitHub.</small>';
+  }
+})();
+</script>
+</body>
+</html>
