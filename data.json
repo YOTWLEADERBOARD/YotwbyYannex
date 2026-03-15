@@ -1,40 +1,15 @@
 {
-  "updatedAt": "14/03/2026 à 17:39",
+  "updatedAt": "15/03/2026 à 16:47",
   "evts": [
     {
-      "id": "e1773506371005",
-      "name": "YOTW#163-Blue Hole",
-      "date": "09/03/2026",
-      "total": 92
+      "id": "e1773589617656",
+      "name": "YOTW#162-Rally and Clim",
+      "date": "20/02/2026",
+      "total": 101
     }
   ],
-  "res": {
-    "e1773506371005": [
-      {
-        "pos": 1,
-        "name": "Rowy_201",
-        "points": 140
-      },
-      {
-        "pos": 2,
-        "name": "Tommy.tm",
-        "points": 110
-      },
-      {
-        "pos": 3,
-        "name": "Dunkkzz",
-        "points": 90
-      },
-      {
-        "pos": 4,
-        "name": "Ujimaa.",
-        "points": 75
-      },
-      {
-        "pos": 5,
-        "name": "Clemalb_",
-        "points": 70
-      },
+  "res": {}
+}      },
       {
         "pos": 6,
         "name": "Cfil777",
